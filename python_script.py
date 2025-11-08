@@ -70,10 +70,10 @@ server_names.sort()
 # --- Parametri tabella ---
 MAX_DS_PER_ROW = 4
 server_col_width = 20
-ds_col_width = 16  # aumentato per più spazio
+ds_col_width = 16
 
 for ds in all_datasources:
-    if len(ds) + 4 > ds_col_width:  # 4 spazi extra
+    if len(ds) + 4 > ds_col_width:
         ds_col_width = len(ds) + 4
 
 # --- Stampa tabella con wrapping ---
