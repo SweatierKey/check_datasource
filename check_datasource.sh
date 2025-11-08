@@ -36,25 +36,28 @@ xml_grab() {
     admin_name=$(xmllint --xpath "string(//*[local-name()='admin-server-name'])" "$config_xml")
 
     # Estraggo tutti i valori in una volta sola
-    while IFS='|' read -r listen_address listen_port_enabled clear_port ssl_enabled ssl_port trust_keystore cluster_multicast_port; do
-        # Le variabili vengono assegnate direttamente nella funzione
-        export listen_address listen_port_enabled clear_port ssl_enabled ssl_port trust_keystore cluster_multicast_port
-    done < <(
-        xmllint --xpath "
-            concat(
-                string(//*[local-name()='server'][*[local-name()='name']='${admin_name}']/*[local-name()='listen-address']
-                | //*[local-name()='admin-server']/*[local-name()='listen-address']), '|',
-                string(//*[local-name()='server'][*[local-name()='name']='${admin_name}']/*[local-name()='listen-port-enabled']
-                | //*[local-name()='admin-server']/*[local-name()='listen-port-enabled']), '|',
-                string(//*[local-name()='server'][*[local-name()='name']='${admin_name}']/*[local-name()='listen-port']
-                | //*[local-name()='admin-server']/*[local-name()='listen-port']), '|',
-                string(//*[local-name()='server'][*[local-name()='name']='${admin_name}']/*[local-name()='ssl']/*[local-name()='enabled']), '|',
-                string(//*[local-name()='server'][*[local-name()='name']='${admin_name}']/*[local-name()='ssl']/*[local-name()='listen-port']), '|',
-                string(//*[local-name()='server'][*[local-name()='name']='${admin_name}']/*[local-name()='custom-trust-key-store-file-name']), '|',
-                string(//*[local-name()='cluster']/*[local-name()='multicast-port'])
-            )
-        " "$config_xml"
-    )
+	IFS='|' read -r \
+		listen_address \
+		listen_port_enabled \
+		clear_port \
+		ssl_enabled \
+		ssl_port \
+		trust_keystore \
+		cluster_multicast_port < <(
+    xmllint --xpath "
+        concat(
+            string(//*[local-name()='server'][*[local-name()='name']='${admin_name}']/*[local-name()='listen-address']
+            | //*[local-name()='admin-server']/*[local-name()='listen-address']), '|',
+            string(//*[local-name()='server'][*[local-name()='name']='${admin_name}']/*[local-name()='listen-port-enabled']
+            | //*[local-name()='admin-server']/*[local-name()='listen-port-enabled']), '|',
+            string(//*[local-name()='server'][*[local-name()='name']='${admin_name}']/*[local-name()='listen-port']
+            | //*[local-name()='admin-server']/*[local-name()='listen-port']), '|',
+            string(//*[local-name()='server'][*[local-name()='name']='${admin_name}']/*[local-name()='ssl']/*[local-name()='enabled']), '|',
+            string(//*[local-name()='server'][*[local-name()='name']='${admin_name}']/*[local-name()='ssl']/*[local-name()='listen-port']), '|',
+            string(//*[local-name()='server'][*[local-name()='name']='${admin_name}']/*[local-name()='custom-trust-key-store-file-name']), '|',
+            string(//*[local-name()='cluster']/*[local-name()='multicast-port'])
+        )
+    " "$config_xml")
 }
 
 # xml_grab() {
